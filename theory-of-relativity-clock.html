@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theory of Relativity Clock</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        #currentTime {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        input {
+            padding: 5px;
+            font-size: 16px;
+        }
+        #results {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .radio-group {
+            margin: 10px 0;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<h1>Theory of Relativity Clock</h1>
+<div id="currentTime">00:00:00</div>
+<button id="toggleButton">Start</button>
+<div class="radio-group">
+<p>Select input mode for perceived time:</p>
+<label>
+<input type="radio" name="timeMode" value="minutes" checked> Minutes
+</label>
+<label>
+<input type="radio" name="timeMode" value="seconds"> Seconds
+</label>
+</div>
+<div>
+<label for="perceivedTime">How much time do you think passed?</label>
+<input type="number" id="perceivedTime" min="0" step="0.1" disabled>
+<span id="timeUnit">minutes</span>
+<button id="submitButton" disabled>Submit</button>
+</div>
+<div id="results">
+<h2>Results:</h2>
+<p>Actual time: <span id="actualTime">0</span> minutes</p>
+<p>Actual time: <span id="actualTimeSeconds">0</span> seconds</p>
+<p>Perceived time: <span id="perceivedTimeResult">0</span> minutes</p>
+<p>Difference: <span id="timeDifference">0</span> minutes</p>
+<p>Difference: <span id="timeDifferenceSeconds">0</span> seconds</p>
+</div>
+</div>
+<script type="84598c40d7878424f24855e8-text/javascript">
+        let startTime, endTime, isRunning = false;
+        const startButton = document.getElementById('toggleButton');
+        const submitButton = document.getElementById('submitButton');
+        const perceivedTimeInput = document.getElementById('perceivedTime');
+        const timeUnitSpan = document.getElementById('timeUnit');
+        const timeModeRadios = document.getElementsByName('timeMode');
+
+        function initializeUI() {
+            perceivedTimeInput.disabled = true;
+            submitButton.disabled = true;
+            updateClock();
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString();
+        }
+
+        function toggleStartStop() {
+            if (!isRunning) {
+                startTime = new Date();
+                isRunning = true;
+                startButton.textContent = 'Stop';
+                perceivedTimeInput.disabled = true;
+                submitButton.disabled = true;
+            } else {
+                endTime = new Date();
+                isRunning = false;
+                startButton.textContent = 'Start';
+                perceivedTimeInput.disabled = false;
+                submitButton.disabled = false;
+            }
+        }
+
+        function submitPerception() {
+            if (!endTime) return; // Ensure the experiment has ended
+
+            const perceivedValue = parseFloat(perceivedTimeInput.value);
+            const isMinutes = document.querySelector('input[name="timeMode"]:checked').value === 'minutes';
+            const perceivedMinutes = isMinutes ? perceivedValue : perceivedValue / 60;
+            const actualMinutes = (endTime - startTime) / 60000; // Convert ms to minutes
+            const actualSeconds = (endTime - startTime) / 1000; // Convert ms to seconds
+            const differenceMinutes = perceivedMinutes - actualMinutes;
+            const differenceSeconds = perceivedMinutes * 60 - actualSeconds;
+            
+            document.getElementById('actualTime').textContent = actualMinutes.toFixed(2);
+            document.getElementById('actualTimeSeconds').textContent = actualSeconds.toFixed(2);
+            document.getElementById('perceivedTimeResult').textContent = perceivedMinutes.toFixed(2);
+            document.getElementById('timeDifference').textContent = differenceMinutes.toFixed(2);
+            document.getElementById('timeDifferenceSeconds').textContent = differenceSeconds.toFixed(2);
+        }
+
+        function updateTimeUnit() {
+            const selectedMode = document.querySelector('input[name="timeMode"]:checked').value;
+            timeUnitSpan.textContent = selectedMode;
+        }
+
+        startButton.addEventListener('click', toggleStartStop);
+        submitButton.addEventListener('click', submitPerception);
+        window.addEventListener('load', initializeUI);
+        timeModeRadios.forEach(radio => radio.addEventListener('change', updateTimeUnit));
+        setInterval(updateClock, 1000);
+    </script>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="84598c40d7878424f24855e8-|49" defer></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8c242d26196c20c5","serverTiming":{"name":{"cfExtPri":true,"cfL4":true}},"version":"2024.8.0","token":"5fcdc8f536f0452983ad9aa874cf4a23"}' crossorigin="anonymous"></script>
+</body>
+</html>
